@@ -14,11 +14,6 @@
             crossorigin="">
     </script>
 
-    <!-- css for map -->
-    <!-- <style>
-        #issMap { height: 180px; }
-    </style> -->
-
     <title>Fetch JSON from API and map lat lon</title>
 </head>
 <body>
@@ -39,7 +34,21 @@
     <script>
         // the leaflet map
         const mymap = L.map('issMAP').setView([0,0], 1);
-       
+
+        // css for maker
+        let myIcon = L.icon({
+            iconUrl     : 'iss.png',
+            iconSize    : [50, 32],
+            iconAnchor  : [22,94],
+            popupAnchor : [-3,-76],
+            shadowUrl   : 'my-icon-shadow.png',
+            shadowSize  : [68, 95],
+            shadowAnchor: [22, 94]
+        });
+
+        // marker for map
+        const marker = L.marker([0, 0]).addTo(mymap);
+
         // giving credit - where credit is due 
         const attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
        
@@ -54,6 +63,9 @@
             const response = await fetch(api_url);
             const data = await response.json();
             const { latitude,longitude } = data;
+
+            // update market
+            marker.setLatLng([latitude,longitude]);
 
             // on-success set data within DOM
             document.getElementById('lati').textContent = latitude;
