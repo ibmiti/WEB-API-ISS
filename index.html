@@ -31,6 +31,8 @@
 
 <div style="height:180px;" id='issMAP'></div>
 
+<p>As the ISS moves across the sky feel free to zoom out/in for your viewing pleasure</p>
+
     <script>
         // giving credit - where credit is due 
         const attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
@@ -68,23 +70,23 @@
             // this will prevent the view from reload - but will allow marker to be dynamically moved by api call to lat/lng
             if (firstLoad) {
                 // specifying map view // int of 5 will give optimum closeness
-                mymap.setView([latitude, longitude], 4);
+                mymap.setView([latitude, longitude], 3);
                 firstLoad = false;
             }
             
 
             // on-success set data within DOM
-            document.getElementById('lati').textContent = latitude;
-            document.getElementById('long').textContent = longitude;
-            document.getElementById('altitude').textContent = data.altitude;
-            document.getElementById('velocity').textContent = data.velocity;
+            document.getElementById('lati').textContent = latitude.toFixed(2);
+            document.getElementById('long').textContent = longitude.toFixed(2);
+            document.getElementById('altitude').textContent = data.altitude.toFixed(2);
+            document.getElementById('velocity').textContent = data.velocity.toFixed(2);
             document.getElementById('visibility').textContent = data.visibility;
-            document.getElementById('days').textContent = data.daynum;
+            document.getElementById('days').textContent = data.daynum.toFixed(2);
         }
         fetchISSLocation();
 
+        // Rate Limit of the whereissat:: max is 1 call every 1 sec's 
         setInterval(fetchISSLocation, 1000);
-
 
     </script>
 </body>
