@@ -11,19 +11,24 @@
 <h1>Where is thee ISS?</h1>
 
 <p>
-    Latitude  : <span id="lati"></span> <br />
-    longitude : <span id="long"></span>
+    Latitude   : <span id="lati"></span> <br />
+    longitude  : <span id="long"></span> <br />
+    altitude   : <span id="altitude"></span> <br />
+    velocity   : <span id="velocity"></span> <br />
+    visibility : <span id="visibility"></span>
 </p>
 
     <script>
         async function fetchISSLocation() {
             const response = await fetch(api_url);
             const data = await response.json();
-            const {latitude, longitude} = data;
-
+            const { latitude,longitude } = data;
             document.getElementById('lati').textContent = latitude;
             document.getElementById('long').textContent = longitude;
-
+            document.getElementById('altitude').textContent = data.altitude;
+            document.getElementById('velocity').textContent = data.velocity;
+            document.getElementById('visibility').textContent = data.visibility;
+            console.log(data);
             console.log(latitude);
             console.log(longitude);
         }
