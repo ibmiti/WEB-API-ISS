@@ -32,40 +32,46 @@
 <div style="height:180px;" id='issMAP'></div>
 
     <script>
+        // giving credit - where credit is due 
+        const attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+
         // the leaflet map
         const mymap = L.map('issMAP').setView([0,0], 1);
-
+        
         // css for maker
-        let myIcon = L.icon({
+        const myissIcon = L.icon({
             iconUrl     : 'iss.png',
             iconSize    : [50, 32],
-            iconAnchor  : [22,94],
-            popupAnchor : [-3,-76],
-            shadowUrl   : 'my-icon-shadow.png',
-            shadowSize  : [68, 95],
-            shadowAnchor: [22, 94]
+            iconAnchor  : [22, 16]
         });
 
         // marker for map
-        const marker = L.marker([0, 0]).addTo(mymap);
+        const marker = L.marker([0, 0], {icon: myissIcon}).addTo(mymap);
 
-        // giving credit - where credit is due 
-        const attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
-       
         const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'; 
         const tiles   = L.tileLayer(tileUrl, { attribution } );
         tiles.addTo(mymap);
 
         const api_url = 'https://api.wheretheiss.at/v1/satellites/25544';
          
+        let firstLoad = true;
         async function fetchISSLocation() {
             // fetch & await data
             const response = await fetch(api_url);
             const data = await response.json();
             const { latitude,longitude } = data;
 
-            // update market
+            // update marker
             marker.setLatLng([latitude,longitude]);
+
+            // if the map / page is loaded for first time run inner method/func
+            // this will prevent the view from reload - but will allow marker to be dynamically moved by api call to lat/lng
+            if (firstLoad) {
+                // specifying map view // int of 5 will give optimum closeness
+                mymap.setView([latitude, longitude], 4);
+                firstLoad = false;
+            }
+            
 
             // on-success set data within DOM
             document.getElementById('lati').textContent = latitude;
@@ -76,7 +82,10 @@
             document.getElementById('days').textContent = data.daynum;
         }
         fetchISSLocation();
- 
+
+        setInterval(fetchISSLocation, 1000);
+
+
     </script>
 </body>
 </html>
